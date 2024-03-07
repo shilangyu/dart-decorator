@@ -14,7 +14,10 @@ DecoratorWrapper cache(Function func) {
     positionalArguments, [
     namedArguments,
   ]) {
-    final key = jsonEncode([positionalArguments, namedArguments]);
+    final key = jsonEncode([
+      positionalArguments,
+      namedArguments?.map((k, v) => MapEntry(k.toString(), v)),
+    ]);
     if (cache.containsKey(key)) {
       return cache[key];
     }
