@@ -74,20 +74,23 @@ macro class Decorate implements FunctionDeclarationsMacro {
         ],
         ') => $proxyFunctionName(',
         // TODO: ugh oh, allocating a list and a map for every call, can this be skipped? Prolly not
-        // TODO; dont create list if not needed
-        '[',
-        for (final param in function.positionalParameters)
-          '${param.identifier.name}, ',
-        '],',
-        // TODO; dont create map if not needed
-        '<',
-        symbol,
-        ', ',
-        dyn,
-        '>{',
-        for (final param in function.namedParameters)
-          '#${param.identifier.name}: ${param.identifier.name}, ',
-        '}',
+        if (function.positionalParameters.isNotEmpty) ...[
+          '[',
+          for (final param in function.positionalParameters)
+            '${param.identifier.name}, ',
+          '],',
+        ] else
+          'null, ',
+        if (function.namedParameters.isNotEmpty) ...[
+          '<',
+          symbol,
+          ', ',
+          dyn,
+          '>{',
+          for (final param in function.namedParameters)
+            '#${param.identifier.name}: ${param.identifier.name}, ',
+          '}',
+        ],
         ');',
       ]),
     );
